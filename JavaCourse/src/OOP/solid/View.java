@@ -10,11 +10,16 @@ public class View {
     public static void main(String[] args) {
         //(1+2)*3
         DateValidator dv = new DateValidator(prompt());
-        System.out.println(dv.getExpression());
-        System.out.println(dv.isExpressionValid());
-        System.out.println(dv.isBracketsOrderCorrectViewer());
-        //где-то либо создать класс, либо метод для добавления пробелов (есть в буфере).
-        //также нужно сделать проверку число или оператор или скобка, скорее всего просто через проверку приоритета.
+//        System.out.println(dv.getExpression());
+//        System.out.println(dv.isExpressionValid()); // проверка метода isExpressionValid
+//        System.out.println(dv.isBracketsOrderCorrectViewer()); //строка для вывода стека
+//
+//        //проверка метода добавления пробелов:
+//        System.out.println(dv.addSpaces());
+//        //проверка метода перевода токенов выражения в массив: (1+2.0) /3.0+1+2- (2+3)
+//        System.out.println(dv.getArrayTokens(dv.addSpaces()));
+//        System.out.println(dv.getArrayTokens(dv.addSpaces()).size());
+        System.out.println(dv.isUnaryMinus(dv.getArrayTokens(dv.addSpaces()))); // -(-(1+2)) // -(-1-(1+2))
 
 //        Deque<Integer> stack2 = new ArrayDeque<>();
 //        stack2.add(1);
