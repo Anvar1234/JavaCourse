@@ -1,5 +1,6 @@
 package OOP.solid;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -9,21 +10,25 @@ public class View {
     private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        //(1+2)*3
-        DateValidator dv = new DateValidator(prompt());
+        //(1+2)*3 //-(-1-(1+2))
+        String expressionNew = prompt();
+        DateValidator dv = new DateValidator(expressionNew);
         System.out.println(dv.getExpression());
-        System.out.println(dv.isExpressionValid()); // проверка метода isExpressionValid
-        System.out.println(dv.isBracketsOrderCorrectViewer()); //строка для вывода стека
+        System.out.println(dv.isExpressionValid());
 
-        //проверка метода addSpaces добавления пробелов:
-        System.out.println(dv.addSpaces());
+        //Проверка Трансформатора (Преобразователя):
+        DateTransformator dt = new DateTransformator(expressionNew);
+        if(dv.isUnaryMinus()){
+            System.out.println(dt.unaryMinusSymbolChanger());
+        }
+        else{
+            System.out.println("В выражении нет унарного минуса.");
+        }
 
-        //проверка метода getArrayTokens перевода токенов выражения в массив: (1+2.0) /3.0+1+2- (2+3)
-        System.out.println(dv.getArrayTokens(dv.addSpaces()));
-        System.out.println(dv.getArrayTokens(dv.addSpaces()).size());
 
-        //проверка метода isUnaryMinus для нахождения и замены унарного минуса:
-        System.out.println(dv.isUnaryMinus(dv.getArrayTokens(dv.addSpaces()))); // -(-(1+2)) // -(-1-(1+2))
+
+
+
     }
 
     //    private static void start(){

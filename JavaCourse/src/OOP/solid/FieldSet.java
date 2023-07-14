@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 public class FieldSet {
-    private List<String> token;
-    private Map<Character, Character> bracket; //1.Во множ числе можно писать? 2.Здесь инициализировать или как я - ниже?
+    private final List<String> token;
+    private final Map<Character, Character> bracket; //1.Во множ числе можно писать? 2.Здесь инициализировать или как я - ниже?
 
     public FieldSet() {
         this.token = List.of("+", "-", "/", "*", "(", ")", "[", "]", ".", "0", "1", "2", "3", "4",

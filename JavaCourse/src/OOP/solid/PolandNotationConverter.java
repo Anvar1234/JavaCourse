@@ -10,12 +10,13 @@ public class PolandNotationConverter {
         this.dateValidator = new DateValidator(expression);
     }
 
-    public String convert(){
-        if(dateValidator.isExpressionValid()){
-            //если фолс, то исключение.
-        }
-        return null; //удалить
-    }
+    //Потом раскомментировать, пока заглушил
+//    public String convert(){
+//        if(dateValidator.isExpressionValid()){
+//            //если фолс, то исключение.
+//        }
+//        return null; //удалить
+//    }
     /**
      * используем здесь результат результат из ДатеВалидатор.
      */
