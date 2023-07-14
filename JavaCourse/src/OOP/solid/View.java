@@ -25,6 +25,11 @@ public class View {
             System.out.println("В выражении нет унарного минуса.");
         }
 
+        /**
+         * Попробовать сделать DateTransformator наследником DateValidator, птму как поля похожи, плюс
+         * DateTransformator не может существовать без проверки начального выражения.
+         */
+
 
 
 
