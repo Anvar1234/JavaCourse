@@ -9,13 +9,13 @@ import java.util.*;
 public class DateValidator {
     private ArrayList<String> resultArrayAfterValidation;
     private final String expression;
-    private final FieldSet FIELDS;
-    private final MethodSet METHODS;
+    private final FieldsClass FIELDS;
+    private final MethodsClass METHODS;
 
     public DateValidator(String expression) {
         this.expression = expression.replaceAll(" ", "").trim();
-        this.FIELDS = new FieldSet();
-        this.METHODS = new MethodSet();
+        this.FIELDS = new FieldsClass();
+        this.METHODS = new MethodsClass();
     }
 
     //Геттер для получения пользовательского выражения. Нужен локально, в целом - нет.
@@ -24,26 +24,36 @@ public class DateValidator {
     }
 
 
-
-    //публичный метод, который будет использоваться в другом классе после всех проверок.
+    /**
+     * Публичный метод, который будет использоваться в другом классе после всех проверок.
+     */
     public boolean isExpressionValid() { // был boolean, потом нужно будет изменить
         return isBracketsOrderCorrect();
     }
 
+
+    /**
+     * Метод для получения результирующей коллекции (массива), состоящего из токенов
+     * пользовательского выражения, после результирующей проверки, которая проводится
+     * в приватном методе getArrayTokens.
+     */
+    //ВОПРОС: правильный ли метод? Нужен ли?
+    //Нужно ли его делать приватным? А если да, то как в классе DateTransformator его использовать?
     public ArrayList<String> resultArrayAfterValidation() {
         return getArrayTokens();
     }
 
 
     /**
-     * Метод для нахождения унарного минуса.
+     * ДОПОЛНИТЕЛЬНЫЙ метод для нахождения в пользовательском выражении унарного минуса.
      * Данный метод должен следовать после проверки наличия только валидных токенов и
      * правильной вложенности скобок, а также после перевода строки с пробелами в массив ArrayList.
      * После этого метода мы уже можем переводить в постфиксную нотацию.
      */
-    boolean isUnaryMinus() {
-        //проверка по нижним методам пройдена, так как получилось создать ArrayList<String> через
-        // метод getArrayTokens(), верно?
+    public boolean isUnaryMinus() {
+        //ВОПРОС: проверка по нижним методам пройдена, так как получилось создать ArrayList<String> через
+        // метод getArrayTokens(), верно? Проверку в getArrayTokens добавил как раз для этого.
+        // ВОПРОС: Метод не используется внутри класса! Допустимо? И он публичный, норм?
         ArrayList<String> arrayListTokens = getArrayTokens();
         for (int i = 1; i < arrayListTokens.size(); i++) {
             if ((i == 1 && arrayListTokens.get(0).equals("-")) ||
@@ -60,8 +70,8 @@ public class DateValidator {
 
 
     /**
-     * Метод для перевода строки с пробелами в массив ArrayList, должен идти после
-     * метода addSpaces.
+     * Метод для перевода строки с пробелами в массив ArrayList.
+     * Должен идти после метода addSpaces. В нашем случае метод addSpaces используется внутри тела метода.
      */
     private ArrayList<String> getArrayTokens() {
         ArrayList<String> arrayTokens = new ArrayList<>();

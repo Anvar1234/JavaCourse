@@ -12,28 +12,21 @@ public class View {
     public static void main(String[] args) {
         //(1+2)*3 //-(-1-(1+2))
         String expressionNew = prompt();
-        DateValidator dv = new DateValidator(expressionNew);
-        System.out.println(dv.getExpression());
-        System.out.println(dv.isExpressionValid());
+        DateValidator dateValidator = new DateValidator(expressionNew);
+        System.out.println(dateValidator.getExpression());
+        System.out.println(dateValidator.isExpressionValid());
 
         //Проверка Трансформатора (Преобразователя):
-        DateTransformator dt = new DateTransformator(expressionNew);
-        if(dv.isUnaryMinus()){
-            System.out.println(dt.unaryMinusSymbolChanger());
+        DateTransformator dateTransformator = new DateTransformator(dateValidator);
+        if(dateValidator.isUnaryMinus()){
+            System.out.println(dateTransformator.unaryMinusSymbolChanger());
+            System.out.println(dateTransformator.specialSymbolChanger(dateTransformator.unaryMinusSymbolChanger()));
+
+//            System.out.println();
         }
         else{
             System.out.println("В выражении нет унарного минуса.");
         }
-
-        /**
-         * Попробовать сделать DateTransformator наследником DateValidator, птму как поля похожи, плюс
-         * DateTransformator не может существовать без проверки начального выражения.
-         */
-
-
-
-
-
     }
 
     //    private static void start(){

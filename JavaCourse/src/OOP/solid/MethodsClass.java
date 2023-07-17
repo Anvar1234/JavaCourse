@@ -1,8 +1,8 @@
 package OOP.solid;
 
-public class MethodSet {
+public class MethodsClass {
 
-    public MethodSet() {
+    public MethodsClass() {
     }
 
     /**
