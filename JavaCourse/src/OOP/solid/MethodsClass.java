@@ -2,7 +2,10 @@ package OOP.solid;
 
 public class MethodsClass {
 
+    private final FieldsClass FIELDS;
+
     public MethodsClass() {
+        this.FIELDS = new FieldsClass();
     }
 
     /**
@@ -31,6 +34,14 @@ public class MethodsClass {
         // удаляем лишние пробелы
         result = result.replaceAll("\\s+", " ").trim();
         return result;
+    }
+
+
+    public int priorityOfSymbols(String symbol) {
+        if (FIELDS.getPriority().containsKey(symbol)) return FIELDS.getPriority().get(symbol);
+        else {
+            throw new RuntimeException("Недопустимый символ");
+        }
     }
 
 }

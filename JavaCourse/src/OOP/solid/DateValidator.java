@@ -75,12 +75,12 @@ public class DateValidator {
      */
     private ArrayList<String> getArrayTokens() {
         ArrayList<String> arrayTokens = new ArrayList<>();
-        if (isBracketsOrderCorrect()) {
+//        if (isBracketsOrderCorrect()) { //Нужно ли оставлять такую проверку?
             String[] tempArrayString = METHODS.addSpaces(expression).split(" "); //временный массив строк после сплита по пробелу
             for (String item : tempArrayString) {
                 arrayTokens.add(item);
             }
-        }
+//        }
         return arrayTokens;
     }
 
