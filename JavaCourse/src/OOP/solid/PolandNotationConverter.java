@@ -25,31 +25,27 @@ public class PolandNotationConverter {
         ArrayList<String> resultPostfixArray = new ArrayList<>(); //коллекция вывода
 
         for (String item : this.expression) {
-            //Если элемент массива число, то в вывод:
+            //Если элемент массива число, то в выводной список:
             if (METHODS.isNumber(item)) {
                 resultPostfixArray.add(item);
-                //Если элемент массива закр скобка ")", то:
-            } else if (item.equals(")")) {
-                //пока на вершине не появится откр скобка "(":
-                //todo ВОПРОС: в этом блоке кода выводит ошибку, ниже я заменил код
-                // на то, что предложила Идея. Тогда код просто останавливается,
-                // когда появляется null и промежут результат не норм:
-//                while (!operators.peek().equals("(")) {
-//                    //добавлялем в вывод элементы из стека операторов
-//                    resultPostfixArray.add(operators.poll());
-//                }
-                while (true) {
-                    assert operators.peek() != null;
-                    if (operators.peek().equals("(")) break;
-                    //добавлялем в вывод элементы из стека операторов
-                    resultPostfixArray.add(operators.poll());
-                }
-                //удаляем откр скобку:
-                operators.remove("(");
-                //Если элемент массива открывающая скобка "(":
-            } else if (item.equals("(")) {
+            }
+            //Если элемент массива открывающая скобка "(":
+            else if (item.equals("(")) {
                 //добавляем элемент в стек операторов:
                 operators.push(item);
+            } else if (item.equals(")")) {//Если элемент массива закр скобка ")", то:
+                //todo Условие ниже (первый if) скорее всего тоже можно убрать.
+                if (!operators.isEmpty()) {//если стек операторов не пуст, то:
+                    if (!operators.peek().equals("(")) {//пока не встретим на вершине стека откр скобку "(":
+                        //добавлялем в вывод список элементы из стека операторов (опер-ры удаляем):
+                        resultPostfixArray.add(operators.poll());
+                    }
+                    //иначе удаляем откр скобку (последний эл-нт): до этого было operators.remove("(");
+                    operators.poll();
+                }
+                //todo Удалить саут, это просто для наглядности.
+                //если стек опер-ров пуст, то:
+                //System.out.println("Стек пуст, переходим дальше");
             }
             /**
              * Блок else когда входит оператор:
@@ -57,10 +53,7 @@ public class PolandNotationConverter {
             else {
                 int priority = FIELDS.getPriority().get(item);
 
-                //todo Похоже нужно поправить, а то в условии написано "Если Стэк НЕ пустой...", а
-                // по условию ниже получается что условие звучит наоборот "if operators.isEmpty()"!
-                // Может как раз условие и должно звучать "Если Стэк ПУСТОЙ..."???
-                //Если Стэк не пустой или последний элемент Стэка == "(":
+                //Если Стек операторов пуст или верхний элемент Стека == "(":
                 if (operators.isEmpty() || operators.peek().equals("(")) {
                     operators.push(item);
 
@@ -70,12 +63,27 @@ public class PolandNotationConverter {
                 }
 
                 //Условие "Если входящий priority <= приоритета последнего элемента Стэка"
-                //todo Возможно добавить условие || Objects.requireNonNull(operators.peek()).equals(")")
+                //todo ЗДЕСЬ БЫЛА ОШИБКА, У НАС ЖЕ ЕСТЬ ЕЩЕ "(" СКОБКА В СТЕКЕ В
+                // ПРИМЕРЕ (, (, 0, -, 1, ), *, 1, -, (, 1, +, 2, ), ) И ОНА ПЕРЕХОДИТ В ВЫВОД:
+                // [0, 1, -, 1, *, (, 1, 2, +, -]!
                 else if (priority <= FIELDS.getPriority().get(operators.peek())) {
-                    while (!operators.isEmpty()) {
-                        resultPostfixArray.add(operators.poll());
-                    }
-                    operators.push(item);
+
+                    //todo Так как у нас условие выше ЕСЛИ входящий приоритет <= того, котор на вершине, то
+                    // дальше начинаются выполнять условия, поэтому проверка
+                    // if (!operators.isEmpty() || !operators.peek().equals("(")) похоже не нужна,
+                    // так как у нас стек и так получается не пуст, да и
+                    // проверка на наличие "(" вроде не нужна, так как у нас условие
+                    //  выше priority <= FIELDS.getPriority().get(operators.peek())
+                    //  не выполниться, если на вершине "(", так как в мапе в FIELDS нет
+                    //  ( и ). А для проверки "(" еще выше есть свое условие.
+                    //  Без этой проверки вроде норм работает: при наличии этой строки результат
+                    //  равен: [0, 1, -, 0, 1, -, 1, *, 1, 2, +, -, *],
+                    //  без: [0, 1, -, 0, 1, -, 1, *, 1, 2, +, -, *]
+                    //если стек операторов не пуст ИЛИ на вершине стека не "(":
+                    if (!operators.isEmpty() || !operators.peek().equals("(")) { //ВОПРОС: без этого и (ниже)
+                        resultPostfixArray.add(operators.poll()); //[1, 1, 2, +, -, 3, -, 4, +, 5, 7, *, -] - верно
+                    } //и без этого норм работает, почему?
+                    operators.push(item); //[1, 1, 2, +, -, 3, 4, +, 5, 7, *] - это косяк
                 }
             }
         }
@@ -84,37 +92,5 @@ public class PolandNotationConverter {
         }
         return resultPostfixArray;
     }
-
-
-//            for (String item : this.expression) {
-//                if (METHODS.isNumber(item)) {
-//                    resultPostfixArray.add(item);
-//                } else if (FIELDS.getPriority().get(item).equals(1)) { // ( = 1
-//                    operators.push(item);
-//                } else if (FIELDS.getPriority().get(item).equals(-1)) { // ) = -1
-//                    //пока на вершине стека операторов не "(", выталкиваем в коолекц вывода
-//                    while (!operators.peek().equals("(")) {
-//                        resultPostfixArray.add(operators.poll());
-//                    }
-//                    operators.remove("(");
-//                    // d. Если текущий токен - оператор, то:
-//                } else if (FIELDS.getPriority().get(item) >= 2) { //см табл приоритетов.
-//                    // i. Пока на вершине стека операторов есть операторы с большим или равным приоритетом, чем
-//                    // текущий оператор,
-//                    while (!(FIELDS.getPriority().get(item) >= FIELDS.getPriority().get(operators.peek()))) {
-//                        //выталкивай их из стека операторов в список вывода.
-//                        resultPostfixArray.add(operators.poll());
-//                    }
-//                    // ii. Помести текущий оператор в стек операторов
-//                    operators.push(item);
-//                }
-//            }
-//        //6.Когда все токены обработаны, вытолкни любые оставшиеся операторы из стека операторов в список вывода
-//        while (!operators.isEmpty()) {
-//            resultPostfixArray.add(operators.poll());
-//        }
-//        return resultPostfixArray;
-//    }
-
 }
 

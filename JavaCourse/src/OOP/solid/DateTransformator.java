@@ -1,9 +1,6 @@
 package OOP.solid;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-
-import static java.util.Collections.addAll;
 //todo ВОПРОС: Главный вопрос, нужно ли методы класса использовать внутри класса? А в других классах (вспомогательных)?
 
 
@@ -19,6 +16,28 @@ public class DateTransformator {
         this.METHODS = new MethodsClass();
     }
 
+
+    /**
+     * Метод для замены спецсимвола "#", которым ранее методом unaryMinusSymbolChanger
+     * в пользовательском выражении заменили унарный минус, на коллекцию символов "(0-1)*".
+     */
+    public ArrayList<String> specialSymbolChanger() {
+        ArrayList<String> arrayListTokens = unaryMinusSymbolChanger();
+        ArrayList<String> changedArrayListTokens = new ArrayList<>();
+        for (String item : arrayListTokens) {
+            if (!item.equals("#")) {
+                changedArrayListTokens.add(item);
+            } else {
+                changedArrayListTokens.addAll(FIELDS.getAdditionalCollectionOfTokens());
+            }
+        }
+        return changedArrayListTokens;
+    }
+
+
+    /**
+     * Метод для замены в пользовательском выражении унарного минуса на спецсимвол "#".
+     */
     //ВОПРОС: Наверное лучше добавить сюда проверку унарного минуса, и возвращать сразу с замененным символом?
     //todo ВОПРОС: А точнее, может при создании (в конструкторе) экземпляра сразу заменять?
     private ArrayList<String> unaryMinusSymbolChanger() {
@@ -37,23 +56,6 @@ public class DateTransformator {
         return arrayListTokens;
     }
 
-    /**
-     * Метод для замены спецсимвола "#", который знаменует собой место унарного минуса, на коллекцию символов "(0-1)*",
-     * которые далее будут в финальном выражении и это выражение необходимо будет переводить в польскую нотацию.
-     */
-
-    public ArrayList<String> specialSymbolChanger() {
-        ArrayList<String> arrayListTokens = unaryMinusSymbolChanger();
-        ArrayList<String> changedArrayListTokens = new ArrayList<>();
-        for (String item : arrayListTokens) {
-            if (!item.equals("#")) {
-                changedArrayListTokens.add(item);
-            } else {
-                changedArrayListTokens.addAll(FIELDS.getAddToArrayToken());
-            }
-        }
-        return changedArrayListTokens;
-    }
 }
 
 

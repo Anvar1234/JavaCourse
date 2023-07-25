@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 /**
  * ВОПРОСЫ общие:
- * Нужно ли добавлять проверки методами из класса методов этого же класса?
+ * Нужно ли добавлять проверки методами из класса, методов этого же класса?
  *
  */
 
@@ -18,7 +18,16 @@ public class View {
     private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        //(1+2)*3 //-(-1-(1+2))
+        //(1+2)*3 //-(-1-(1+2)) - ош, (-1-(1+2)) - ош, меньше - норм
+        System.out.println("-1-(1+2)");
+        System.out.println("-(-1-(1+2))");
+        System.out.println("1-(1+2)-3+4-5*7 = [1, 1, 2, +, -, 3, -, 4, +, 5, 7, *, -]");
+        System.out.println("3+(1-(1+2)) = [3, 1, 1, 2, +, -, +]");
+        System.out.println("-3+(1-(1+2)) = [0, 1, -, 3, *, 1, 1, 2, +, -, +]");
+        System.out.println("1*(2-(3-4)) = [1, 2, 3, 4, -, -, *]");
+        //(((1-2)*3)*(4*5))*6 = [1, 2, -, 3, *, 4, 5, *, *, 6, *]
+        //1*2*3*4-1-2-3 = [1, 2, *, 3, *, 4, *, 1, -, 2, -, 3, -]
+
         String expressionNew = prompt();
         DateValidator dateValidator = new DateValidator(expressionNew);
         System.out.println(dateValidator.getExpression());

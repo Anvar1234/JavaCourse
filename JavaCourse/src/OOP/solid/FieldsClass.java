@@ -5,7 +5,7 @@ import java.util.*;
 public class FieldsClass {
     private final List<String> token;
     private final Map<Character, Character> bracket; //1.Во множ числе можно писать? 2.Здесь инициализировать или как я - ниже?
-    private final List<String> addToArrayToken;
+    private final List<String> additionalCollectionOfTokens;
 
     private final Map<String, Integer> priority;
 
@@ -17,15 +17,13 @@ public class FieldsClass {
         this.bracket.put(')', '(');
         this.bracket.put(']', '[');
 
-        this.addToArrayToken = new ArrayList<>(Arrays.asList("(", "0", "-", "1", ")", "*"));
+        this.additionalCollectionOfTokens = new ArrayList<>(Arrays.asList("(", "0", "-", "1", ")", "*"));
 
         this.priority = new HashMap<>();
         this.priority.put("+", 2);
         this.priority.put("-", 2);
         this.priority.put("*", 3);
         this.priority.put("/", 3);
-        this.priority.put("(", 1);
-        this.priority.put(")", -1);
     }
 
     public List<String> getToken() {
@@ -36,8 +34,8 @@ public class FieldsClass {
         return bracket;
     }
 
-    public List<String> getAddToArrayToken() {
-        return addToArrayToken;
+    public List<String> getAdditionalCollectionOfTokens() {
+        return additionalCollectionOfTokens;
     }
 
     public Map<String, Integer> getPriority() {
