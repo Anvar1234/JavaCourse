@@ -11,7 +11,7 @@ public class FieldsClass {
 
     public FieldsClass() {
         this.token = List.of("+", "-", "/", "*", "(", ")", "[", "]", ".", "0", "1", "2", "3", "4",
-                "5", "6", "7", "8", "9");
+                "5", "6", "7", "8", "9", "%");
 
         this.bracket = new HashMap<>();
         this.bracket.put(')', '(');
@@ -24,6 +24,8 @@ public class FieldsClass {
         this.priority.put("-", 2);
         this.priority.put("*", 3);
         this.priority.put("/", 3);
+        this.priority.put("%", 4); // это типа возведение в степень, например. Если нужно добавить символ, то
+        //нужно не забыть откорректировать регулярное выражение в методе addSpaces.
     }
 
     public List<String> getToken() {

@@ -9,7 +9,7 @@ public class DateTransformator {
     private final FieldsClass FIELDS;
     private final MethodsClass METHODS;
 
-
+//todo Может можно использовать поля ФИЕЛДЫ и МЕТОДС из Валидатора? Иначе получается дублирование кода вроде как?
     public DateTransformator(DateValidator dateValidator) {
         this.validExpression = dateValidator.resultArrayAfterValidation();
         this.FIELDS = new FieldsClass();

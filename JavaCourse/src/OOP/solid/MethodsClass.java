@@ -29,8 +29,10 @@ public class MethodsClass {
      * Даже скорее всего после проверки выражения на валидный порядок всех токенов, операторов и операндов.
      */
     public String addSpaces(String exp) {
+        //todo ВОПРОС: как правильно понять regexы? И составлять.
+
         // заменяем все вхождения скобок и операторов на сами символы с добавлением пробелов
-        String result = exp.replaceAll("([\\(\\)\\+\\-\\*\\/])", " $1 ");
+        String result = exp.replaceAll("([\\(\\)\\+\\-\\*\\/\\%])", " $1 ");
         // удаляем лишние пробелы
         result = result.replaceAll("\\s+", " ").trim();
         return result;
