@@ -43,12 +43,14 @@ public class View {
             PolandNotationConverter polandNotationConverter =
                     new PolandNotationConverter(dateTransformator.specialSymbolChanger());
             System.out.println(polandNotationConverter.convertToPostfix());
+            System.out.println(polandNotationConverter.handlingPostfixNotation(polandNotationConverter.convertToPostfix()));
         }
         else{
             System.out.println("В выражении нет унарного минуса.");
             PolandNotationConverter polandNotationConverter =
                     new PolandNotationConverter(dateValidator.resultArrayAfterValidation());
             System.out.println(polandNotationConverter.convertToPostfix());
+            System.out.println(polandNotationConverter.handlingPostfixNotation(polandNotationConverter.convertToPostfix()));
         }
 
 
