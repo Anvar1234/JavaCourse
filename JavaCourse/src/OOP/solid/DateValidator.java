@@ -7,7 +7,7 @@ import java.util.*;
  * Проверить выражение на правильность (лишние скобки и тд)
  */
 public class DateValidator {
-    private ArrayList<String> resultArrayAfterValidation;
+
     private final String expression;
     private final FieldsClass FIELDS;
     private final MethodsClass METHODS;
@@ -18,70 +18,38 @@ public class DateValidator {
         this.METHODS = new MethodsClass();
     }
 
-    //Геттер для получения пользовательского выражения. Нужен локально, в целом - нет.
-    public String getExpression() {
-        return expression;
-    }
-
-
-    /**
-     * Публичный метод, который будет использоваться в другом классе после всех проверок.
-     */
-    public boolean isExpressionValid() { // был boolean, потом нужно будет изменить
-        return isBracketsOrderCorrect();
-    }
 
 
     /**
      * Метод для получения результирующей коллекции (массива), состоящего из токенов
-     * пользовательского выражения, после результирующей проверки, которая проводится
+     * пользовательского выражения, которая проводится
      * в приватном методе getArrayTokens.
      */
     //ВОПРОС: правильный ли метод? Нужен ли?
     //Нужно ли его делать приватным? А если да, то как в классе DateTransformator его использовать?
-    public ArrayList<String> resultArrayAfterValidation() {
-        return getArrayTokens();
+    public ArrayList<String> resultArrayAfterValidation() throws Exception {
+        if (isValidTokens()) {
+            if (isBracketsOrderCorrect()) {
+                return getArrayOfTokens();
+            } else throw new Exception("Некорректно расставлены скобки!");
+        } else throw new Exception("Использованы недопустимые символы!");
     }
 
 
-    /**
-     * ДОПОЛНИТЕЛЬНЫЙ метод для нахождения в пользовательском выражении унарного минуса.
-     * Данный метод должен следовать после проверки наличия только валидных токенов и
-     * правильной вложенности скобок, а также после перевода строки с пробелами в массив ArrayList.
-     * После этого метода мы уже можем переводить в постфиксную нотацию.
-     */
-    public boolean isUnaryMinus() {
-        //ВОПРОС: проверка по нижним методам пройдена, так как получилось создать ArrayList<String> через
-        // метод getArrayTokens(), верно? Проверку в getArrayTokens добавил как раз для этого.
-        // ВОПРОС: Метод не используется внутри класса! Допустимо? И он публичный, норм?
-        ArrayList<String> arrayListTokens = getArrayTokens();
-        for (int i = 1; i < arrayListTokens.size(); i++) {
-            if ((i == 1 && arrayListTokens.get(0).equals("-")) ||
-                    arrayListTokens.get(i).equals("-") &&
-                            FIELDS.getBracket().containsValue(arrayListTokens.get(i - 1).charAt(0))) {
-                //todo ВОПРОС: в brackets ошибка, не заходит в мапу походу. А птму что там у меня символы,
-                // а здесь я использую стринг. Возможно лучше переделать все методы,
-                // где используются char, либо здесь все правильно написал и делать лучше локально?
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     /**
-     * Метод для перевода строки с пробелами в массив ArrayList.
-     * Должен идти после метода addSpaces. В нашем случае метод addSpaces используется внутри тела метода.
+     * Метод для перевода массива строк (получаемого сплитованием по пробелам в исходном выражении
+     * после работы метода addSpaces) в список ArrayList.
      */
-    private ArrayList<String> getArrayTokens() {
-        ArrayList<String> arrayTokens = new ArrayList<>();
-//        if (isBracketsOrderCorrect()) { //Нужно ли оставлять такую проверку?
-            String[] tempArrayString = METHODS.addSpaces(expression).split(" "); //временный массив строк после сплита по пробелу
-            for (String item : tempArrayString) {
-                arrayTokens.add(item);
-            }
+    private ArrayList<String> getArrayOfTokens() {
+//        if (isBracketsOrderCorrect()) { //Нужно ли оставлять такую проверку? Вопрос частично дублирует
+        //вопрос про использование методов внутри других методов.
+        //В строке ниже при сплитовании мы получаем массив строк. Методом asList мы преобразуем массив в список.
+        //Ранее я делал переменную типа массива String[] и присваивал ей сплитованное выражение,
+        //а затем форичом копировал в список.
+        return new ArrayList<>(Arrays.asList(METHODS.addSpaces(expression).split(" ")));
 //        }
-        return arrayTokens;
+
     }
 
 
@@ -89,22 +57,29 @@ public class DateValidator {
      * Метод проверки вложенности скобок в пользовательском выражении.
      * Должен идти после самого первого метода isValidToken.
      */
+    //todo ВОПРОС: можно ли и нужно ли использовать внутри методов другие методы как ниже?
+    // Или каждый метод должен быть использован отдельно где-то в другом классе, например в мейне?
+    // Например где-то в мейн вызываем метод isValidTokens, и если тру, то только тогда
+    // метод isBracketsOrderCorrect?
+    // Похоже это и есть принцип ИНКАПСУЛЯЦИИ? То есть чтобы пользователь не мог переставить
+    // порядок методов иначе, мы должны скрыть порядок проверки (методов) внутри других методов.
     private boolean isBracketsOrderCorrect() {
         Deque<Character> stack = new LinkedList<>();
-        if (isValidTokens()) {
             for (char c : expression.toCharArray()) {
+                //если мапа содержит значение "с" (откр скобка), то пушим ее в стек.
                 if (FIELDS.getBracket().containsValue(c)) {
                     stack.push(c);
+                    //иначе если перед нами закрыв скобка (ключ "с"), то:
                 } else if (FIELDS.getBracket().containsKey(c)) {
+                    //если стек пустой или последнее значение стека != значению по ключу (откр скобка),
+                    // что означает что каждой закрыв скобке должна соответствовать (быть в стеке) откр скобка:
                     if (stack.isEmpty() || stack.pop() != FIELDS.getBracket().get(c)) {
                         return false;
                     }
                 }
             }
-            return stack.isEmpty();
+            return stack.isEmpty(); //или tru?
         }
-        return false; //здесь была ошибка из-за того, что в мапе скобок были квадратные скобки, а в списке токенов - нет.
-    }
 
 
     /**

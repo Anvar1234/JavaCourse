@@ -7,7 +7,7 @@ public class PolandNotationConverter {
     private final MethodsClass METHODS;
 
 
-    private final ArrayList<String> expression; //Идея предлагает убрать поле и упрооститьт конструктор
+    private final ArrayList<String> expression;
 
     //todo Подумать, что добавлять в конструктор? Так-то у нас всегда приходит АррауЛист, хоть после Валидатора,
     // хоть после Трансформатора.

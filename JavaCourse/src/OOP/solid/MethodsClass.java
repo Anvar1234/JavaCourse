@@ -1,5 +1,7 @@
 package OOP.solid;
 
+import java.util.ArrayList;
+
 public class MethodsClass {
 
     private final FieldsClass FIELDS;
@@ -23,10 +25,9 @@ public class MethodsClass {
         }
     }
 
+
     /**
      * Вспомогательный метод для добавления в строке String пробелов между операторами и операндами.
-     * Идет где-то после проверки наличия только валидных токенов и правильной вложенности скобок.
-     * Даже скорее всего после проверки выражения на валидный порядок всех токенов, операторов и операндов.
      */
     public String addSpaces(String exp) {
         //todo ВОПРОС: как правильно понять regexы? И составлять.
@@ -36,14 +37,6 @@ public class MethodsClass {
         // удаляем лишние пробелы
         result = result.replaceAll("\\s+", " ").trim();
         return result;
-    }
-
-
-    public int priorityOfSymbols(String symbol) {
-        if (FIELDS.getPriority().containsKey(symbol)) return FIELDS.getPriority().get(symbol);
-        else {
-            throw new RuntimeException("Недопустимый символ");
-        }
     }
 
 }
