@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Scanner;
 
-//todo ВОПРОС: Главный вопрос, нужно ли методы класса использовать внутри класса? А в других классах (вспомогательных)?
 
 /**
  * Класс отвечающий за взаимодействие с пользователем.
@@ -13,6 +12,15 @@ import java.util.Scanner;
 /**
  * ВОПРОСЫ общие:
  * Нужно ли добавлять проверки методами из класса, методов этого же класса?
+ * Нужно/можно ли методы класса использовать внутри класса? А в других классах (вспомогательных)?
+ * Можно/нужно ли использовать одинаковые названия полей разных классов. А если смыл у них одинаковый?
+ * Можно ли использовать в разных методах одинаковые названия возвращаемых одним и входящих в другой аргументов?
+ * кажется что так вроде понятнее читается. Как здесь resultPostfixArray.
+ * Я правильно помню, что лучше использовать if-else вместо switch-case?
+ * Как правильно понять regexы? И составлять.
+ * Нужно ли оставлять такую проверку? Вопрос частично дублирует вопрос про использование методов внутри
+ * других методов.
+ * Что делать с этим методом?))
  */
 
 
@@ -20,20 +28,21 @@ public class View {
     private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
-        //(1+2)*3 //-(-1-(1+2)) - ош, (-1-(1+2)) - ош, меньше - норм
-        System.out.println("-1-(1+2) = [0, 1, -, 1, *, 1, 2, +, -]");
+        //примеры выражений и ОПН выражения:
+        System.out.println("-3*1*2%+5/2 = [0, 1, -, 3, *, 1, *, 2, %, *, 5, 2, /, +]");
         System.out.println("-(-1-(1+2)) = [0, 1, -, 0, 1, -, 1, *, 1, 2, +, -, *]");
         System.out.println("1-(1+2)-3+4-5*7 = [1, 1, 2, +, -, 3, -, 4, +, 5, 7, *, -]");
-        System.out.println("3+(1-(1+2)) = [3, 1, 1, 2, +, -, +]");
         System.out.println("-3+(1-(1+2)) = [0, 1, -, 3, *, 1, 1, 2, +, -, +]");
         System.out.println("1*(2-(3-4)) = [1, 2, 3, 4, -, -, *]");
         System.out.println("3+1*2%+5 = [3, 1, 2, %, *, +, 5, +]\n");
 
+        //присваиваем пользовательский ввод переменной inputExpression.
+        String inputExpression = prompt();
 
-        String expressionNew = prompt();
+        //запускаем проверку входящего выражения inputExpression.
+        DateValidator dateValidator = new DateValidator(inputExpression);
 
-        DateValidator dateValidator = new DateValidator(expressionNew);
-
+        //запускаем преобразование входящего выражения inputExpression.
         DateTransformator dateTransformator = new DateTransformator(dateValidator);
         //todo Из-за этой строчки выходила ошибка! Проверить!
         // System.out.println("dateTransformator= " + dateTransformator.resultArrayAfterTransformation());
@@ -41,38 +50,25 @@ public class View {
         // то следующий вызов уже не имеет унарного минуса, поэтому сообщение и выходило.
         // По итогу не ясно, правильно ли я сделал, что для получения результирующего выражения и
         // в Валидаторе и в Трансформаторе сделал проверки. Хотя мы можем результат положить в переменную же.
+
+        //Получаем окончательное выражение для преобразования в ОПН.
         ArrayList<String> resultArrayOfTransformation = dateTransformator.resultArrayAfterTransformation();
 
+        //Загоняем выражение, прошедшее проверку и преобразование в ОПН-конвертер.
         PolandNotationConverter polandNotationConverter = new PolandNotationConverter(resultArrayOfTransformation);
         ArrayList<String> resultArrayOfConvertation = polandNotationConverter.convertToPostfix();
         System.out.println(resultArrayOfConvertation);
 
-        Deque<Double> finalResultArray = polandNotationConverter.handlingPostfixNotation(resultArrayOfConvertation);
+        //Загоняем ОПН-выражение в калькулятор (котор высчитывает ОПН).
+        Calculator calculator = new Calculator();
+        Deque<Double> finalResultArray = calculator.calculatePostfixNotation(resultArrayOfConvertation);
+        //Выводим результат работы калькулятора.
         System.out.println(finalResultArray);
-
-//        //Прошлый вариант:
-//        //Проверка Трансформатора (Преобразователя):
-//        DateTransformator dateTransformator = new DateTransformator(dateValidator);
-//        if(dateValidator.isThereUnaryMinus()){
-//            //выводим польз выражение с символом #, которым заменили унарный минус.
-//            //System.out.println(dateTransformator.unaryMinusSymbolChanger());
-//            //выводим польз выражение с замененным символом #.
-//            System.out.println(dateTransformator.specialSymbolChanger());
-//            PolandNotationConverter polandNotationConverter =
-//                    new PolandNotationConverter(dateTransformator.specialSymbolChanger());
-//            System.out.println(polandNotationConverter.convertToPostfix());
-//            System.out.println(polandNotationConverter.handlingPostfixNotation(polandNotationConverter.convertToPostfix()));
-//        }
-//        else{
-//            System.out.println("В выражении нет унарного минуса.");
-//            PolandNotationConverter polandNotationConverter =
-//                    new PolandNotationConverter(dateValidator.resultArrayAfterValidation());
-//            System.out.println(polandNotationConverter.convertToPostfix());
-//            System.out.println(polandNotationConverter.handlingPostfixNotation(polandNotationConverter.convertToPostfix()));
-//        }
 
 
     }
+
+    //todo ВОПРОС: что делать с этим методом?))
 
     //    private static void start(){
 //        while (true){

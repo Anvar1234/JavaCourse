@@ -2,12 +2,16 @@ package OOP.solid;
 
 import java.util.*;
 
+
+/**
+ * Класс, хранящий неизменяемые поля, применение которых возможно для разных классов. Имеет геттеры для полей.
+ */
 public class FieldsClass {
     private final List<String> token;
     private final Map<Character, Character> bracket; //1.Во множ числе можно писать? 2.Здесь инициализировать или как я - ниже?
     private final List<String> additionalCollectionOfTokens;
-
     private final Map<String, Integer> priority;
+
 
     public FieldsClass() {
         this.token = List.of("+", "-", "/", "*", "(", ")", "[", "]", ".", "0", "1", "2", "3", "4",
@@ -28,6 +32,9 @@ public class FieldsClass {
         //нужно не забыть откорректировать регулярное выражение в методе addSpaces.
     }
 
+    /**
+     * Геттеры полей класса.
+     */
     public List<String> getToken() {
         return token;
     }

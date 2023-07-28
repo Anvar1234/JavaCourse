@@ -3,21 +3,30 @@ package OOP.solid;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
+/**
+ * Класс для преобразования пользовательского выражения, как то: проверка на унарный минус,
+ * замена унарного минуса спецсимволом, замена спецсимвола на набор символов, после
+ * прохождения необходимых проверок.
+ * Имеет один публичный метод, который возвращает окончательный результат для дальнейшего использования.
+ */
 public class DateTransformator {
     private final ArrayList<String> validExpression;
     private final FieldsClass FIELDS;
-    private final MethodsClass METHODS;
 
-//todo Может можно использовать поля ФИЕЛДЫ и МЕТОДС из Валидатора? Иначе получается дублирование кода вроде как?
+    //todo Может можно использовать поля ФИЕЛДЫ и МЕТОДС из Валидатора? Иначе получается дублирование кода вроде как?
     public DateTransformator(DateValidator dateValidator) throws Exception {
         this.validExpression = dateValidator.resultArrayAfterValidation();
         this.FIELDS = new FieldsClass();
-        this.METHODS = new MethodsClass();
     }
 
-    public ArrayList<String> resultArrayAfterTransformation() {
-        if (isThereUnaryMinus()) {
+
+    /**
+     * Результирующий метод для получения результирующей коллекции (массива),
+     * после необходимых трансформаций пользовательского выражения.
+     */
+    public ArrayList<String> resultArrayAfterTransformation() throws Exception {
+        if (validExpression.contains("#")) throw new Exception("Попытка повторного преобразования выражения!");
+        else if (isThereUnaryMinus()) {
             return specialSymbolChanger();//метод unaryMinusSymbolChanger() вызывать не нужно, потому что он внутри метода specialSymbolChanger() вызывается.
         } else {
             System.out.println("Унарного минуса не обнаружено. Выражение готово к использованию.");
@@ -26,48 +35,44 @@ public class DateTransformator {
     }
 
 
-
     /**
      * Метод для замены спецсимвола "#", которым ранее методом unaryMinusSymbolChanger
      * в пользовательском выражении заменили унарный минус, на коллекцию символов "(0-1)*".
      */
     private ArrayList<String> specialSymbolChanger() {
 
-            ArrayList<String> arrayListTokens = unaryMinusSymbolChanger();
-            ArrayList<String> changedArrayListTokens = new ArrayList<>();
-            for (String item : arrayListTokens) {
-                if (!item.equals("#")) {
-                    changedArrayListTokens.add(item);
-                } else {
-                    changedArrayListTokens.addAll(FIELDS.getAdditionalCollectionOfTokens());
-                }
+        ArrayList<String> arrayListTokens = unaryMinusSymbolChanger();
+        ArrayList<String> changedArrayListTokens = new ArrayList<>();
+        for (String item : arrayListTokens) {
+            if (!item.equals("#")) {
+                changedArrayListTokens.add(item);
+            } else {
+                changedArrayListTokens.addAll(FIELDS.getAdditionalCollectionOfTokens());
             }
-            return changedArrayListTokens;
         }
-
+        return changedArrayListTokens;
+    }
 
 
     /**
      * Метод для замены в пользовательском выражении унарного минуса на спецсимвол "#".
      */
-    //ВОПРОС: Наверное лучше добавить сюда проверку унарного минуса, и возвращать сразу с замененным символом?
-    //todo ВОПРОС: А точнее, может при создании (в конструкторе) экземпляра сразу заменять?
     private ArrayList<String> unaryMinusSymbolChanger() {
 
-            ArrayList<String> arrayListTokens = this.validExpression;
-            for (int i = 1; i < arrayListTokens.size(); i++) {
-                if (i == 1 && arrayListTokens.get(0).equals("-")) {
-                    arrayListTokens.set(0, "#");
-                    //i++;
-                } else if (arrayListTokens.get(i).equals("-") &&
-                        FIELDS.getBracket().containsValue(arrayListTokens.get(i - 1).charAt(0))) {
-                    arrayListTokens.set(i, "#");
-                    //i++;
-                }
-
+        ArrayList<String> arrayListTokens = this.validExpression;
+        for (int i = 1; i < arrayListTokens.size(); i++) {
+            if (i == 1 && arrayListTokens.get(0).equals("-")) {
+                arrayListTokens.set(0, "#");
+                //i++;
+            } else if (arrayListTokens.get(i).equals("-") &&
+                    FIELDS.getBracket().containsValue(arrayListTokens.get(i - 1).charAt(0))) {
+                arrayListTokens.set(i, "#");
+                //i++;
             }
-            return arrayListTokens;
+
         }
+        return arrayListTokens;
+    }
 
 
     /**
