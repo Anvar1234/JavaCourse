@@ -1,7 +1,8 @@
 package OOP.solid;
 
 import java.util.ArrayList;
-import java.util.Objects;
+
+import static OOP.solid.Fields.*;
 
 /**
  * Класс для преобразования пользовательского выражения, как то: проверка на унарный минус,
@@ -9,16 +10,24 @@ import java.util.Objects;
  * прохождения необходимых проверок.
  * Имеет один публичный метод, который возвращает окончательный результат для дальнейшего использования.
  */
-public class DateTransformator {
-    private final ArrayList<String> validExpression;
-    private final FieldsClass FIELDS;
+public class UnaryMinusPreparator {
+    private ArrayList<String> validExpression;
+    private final MathExpressionValidator mathExpressionValidator;
+
 
     //todo Может можно использовать поля ФИЕЛДЫ и МЕТОДС из Валидатора? Иначе получается дублирование кода вроде как?
-    public DateTransformator(DateValidator dateValidator) throws Exception {
-        this.validExpression = dateValidator.resultArrayAfterValidation();
-        this.FIELDS = new FieldsClass();
+    public UnaryMinusPreparator(String expression) {
+        this.mathExpressionValidator = new MathExpressionValidator(expression);
+        try {
+            this.validExpression = mathExpressionValidator.resultArrayAfterValidation();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
+    public MathExpressionValidator getDateValidator() {
+        return mathExpressionValidator;
+    }
 
     /**
      * Результирующий метод для получения результирующей коллекции (массива),
@@ -47,7 +56,7 @@ public class DateTransformator {
             if (!item.equals("#")) {
                 changedArrayListTokens.add(item);
             } else {
-                changedArrayListTokens.addAll(FIELDS.getAdditionalCollectionOfTokens());
+                changedArrayListTokens.addAll(additionalCollectionOfTokens);
             }
         }
         return changedArrayListTokens;
@@ -65,7 +74,7 @@ public class DateTransformator {
                 arrayListTokens.set(0, "#");
                 //i++;
             } else if (arrayListTokens.get(i).equals("-") &&
-                    FIELDS.getBracket().containsValue(arrayListTokens.get(i - 1).charAt(0))) {
+                    brackets.containsValue(arrayListTokens.get(i - 1).charAt(0))) {
                 arrayListTokens.set(i, "#");
                 //i++;
             }
@@ -82,10 +91,15 @@ public class DateTransformator {
      * После этого метода мы уже можем переводить в постфиксную нотацию.
      */
     private boolean isThereUnaryMinus() {
-        for (int i = 1; i < Objects.requireNonNull(validExpression).size(); i++) {
+        for (int i = 1; i < validExpression.size(); i++) {
+            // Начинаю с i==1, птму что ниже в условии get(i - 1) может быть такое, что нулевой элемент это минус,
+            // и тогда метод get(i - 1) вызовет ошибку, так как
+            // в выражении нет предыдущих эементов.
+            // если нулевой элемент == минусу или если текущее значение (i>1) в выражении == минусу, но при этом
+            // предыдущий элемент == открывающей скобке, то:
             if ((i == 1 && validExpression.get(0).equals("-")) ||
                     validExpression.get(i).equals("-") &&
-                            FIELDS.getBracket().containsValue(validExpression.get(i - 1).charAt(0))) {
+                            brackets.containsValue(validExpression.get(i - 1).charAt(0))) {
                 //todo ВОПРОС: в brackets ошибка, не заходит в мапу походу. А птму что там у меня символы,
                 // а здесь я использую стринг. Возможно лучше переделать все методы,
                 // где используются char, либо здесь все правильно написал и делать лучше локально?

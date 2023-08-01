@@ -2,18 +2,22 @@ package OOP.solid;
 
 import java.util.*;
 
+import static OOP.solid.Fields.priorities;
+import static OOP.solid.Utils.isNumber;
+
 /**
  * Класс для перевода пользовательского выражения в обратную польскую нотацию (ОПН).
  */
 public class PolandNotationConverter {
-    private final FieldsClass FIELDS;
-    private final MethodsClass METHODS;
-    private final ArrayList<String> expression;
 
-    public PolandNotationConverter(ArrayList<String> expression) {
+    private final ArrayList<String> expressionList;
+    private String expression;
+    private final UnaryMinusPreparator unaryMinusPreparator;
+
+    public PolandNotationConverter(ArrayList<String> expressionList, String expression) {
         this.expression = expression;
-        this.FIELDS = new FieldsClass();
-        this.METHODS = new MethodsClass();
+        this.expressionList = expressionList;
+        this.unaryMinusPreparator = new UnaryMinusPreparator(expression);
     }
 
     /**
@@ -23,9 +27,9 @@ public class PolandNotationConverter {
         Deque<String> operators = new ArrayDeque<>(); //стек операторов
         ArrayList<String> resultPostfixArray = new ArrayList<>(); //коллекция вывода
 
-        for (String item : this.expression) {
+        for (String item : this.expressionList) {
             //Если элемент массива число, то в выводной список:
-            if (METHODS.isNumber(item)) {
+            if (isNumber(item)) {
                 resultPostfixArray.add(item);
             }
             //Если элемент массива открывающая скобка "(":
@@ -50,22 +54,22 @@ public class PolandNotationConverter {
              * Блок else когда входит оператор:
              */
             else {
-                int incomingPriority = FIELDS.getPriority().get(item);
+                int incomingPriority = priorities.get(item);
 
                 //Если Стек операторов пуст или верхний элемент Стека == "(":
                 if (operators.isEmpty() || operators.peek().equals("(")) {
                     operators.push(item);
 
                     //Если входящий priority > приоритета последнего элемента Стэка:
-                } else if (incomingPriority > FIELDS.getPriority().get(operators.peek())) {
+                } else if (incomingPriority > priorities.get(operators.peek())) {
                     operators.push(item);
                 }
 
                 //Условие "Если входящий priority <= приоритета верхнего элемента Стэка"
-                else if (incomingPriority <= FIELDS.getPriority().get(operators.peek())) {
+                else if (incomingPriority <= priorities.get(operators.peek())) {
 
                     //  Ошибка была в том, что в цикле while вместо && ставил ||, и peek выдавал ноль.
-                    while (!operators.isEmpty() && !operators.peek().equals("(") && incomingPriority <= FIELDS.getPriority().get(operators.peek())) {
+                    while (!operators.isEmpty() && !operators.peek().equals("(") && incomingPriority <= priorities.get(operators.peek())) {
                         resultPostfixArray.add(operators.poll());
                     }
                     operators.push(item);

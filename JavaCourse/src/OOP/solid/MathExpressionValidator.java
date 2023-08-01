@@ -2,23 +2,23 @@ package OOP.solid;
 
 import java.util.*;
 
+import static OOP.solid.Fields.brackets;
+import static OOP.solid.Fields.tokens;
+
 /**
  * Класс для проверки пользовательского выражения (ввода).
  * Проверяет выражение на правильность (лишние скобки и тд).
  * Имеет один публичный метод, который возвращает окончательный результат для дальнейшего использования.
  */
-public class DateValidator {
+public class MathExpressionValidator {
 
     private final String expression;
-    private final FieldsClass FIELDS;
-    private final MethodsClass METHODS;
+    private final Utils METHODS;
 
-    public DateValidator(String expression) {
+    public MathExpressionValidator(String expression) {
         this.expression = expression.replaceAll(" ", "").trim();
-        this.FIELDS = new FieldsClass();
-        this.METHODS = new MethodsClass();
+        this.METHODS = new Utils();
     }
-
 
 
     /**
@@ -26,13 +26,14 @@ public class DateValidator {
      * после необходимых проверок пользовательского выражения.
      */
     public ArrayList<String> resultArrayAfterValidation() throws Exception {
-        if (isValidTokens()) {
-            if (isBracketsOrderCorrect()) {
-                return getArrayOfTokens();
-            } else throw new Exception("Некорректно расставлены скобки!");
-        } else throw new Exception("Использованы недопустимые символы!");
+        if (isNotEmpty()) {
+            if (isValidTokens()) {
+                if (isBracketsOrderCorrect()) {
+                    return getArrayOfTokens();
+                } else throw new Exception("Некорректно расставлены скобки!");
+            } else throw new Exception("Использованы недопустимые символы!");
+        } else throw new Exception("Выражение пустое!");
     }
-
 
 
     /**
@@ -57,21 +58,21 @@ public class DateValidator {
      */
     private boolean isBracketsOrderCorrect() {
         Deque<Character> stack = new LinkedList<>();
-            for (char c : expression.toCharArray()) {
-                //если мапа содержит значение "с" (откр скобка), то пушим ее в стек.
-                if (FIELDS.getBracket().containsValue(c)) {
-                    stack.push(c);
-                    //иначе если перед нами закрыв скобка (ключ "с"), то:
-                } else if (FIELDS.getBracket().containsKey(c)) {
-                    //если стек пустой или последнее значение стека != значению по ключу (откр скобка),
-                    // что означает что каждой закрыв скобке должна соответствовать (быть в стеке) откр скобка:
-                    if (stack.isEmpty() || stack.pop() != FIELDS.getBracket().get(c)) {
-                        return false;
-                    }
+        for (char c : expression.toCharArray()) {
+            //если мапа содержит значение "с" (откр скобка), то пушим ее в стек.
+            if (brackets.containsValue(c)) {
+                stack.push(c);
+                //иначе если перед нами закрыв скобка (ключ "с"), то:
+            } else if (brackets.containsKey(c)) {
+                //если стек пустой или последнее значение стека != значению по ключу (откр скобка),
+                // что означает что каждой закрыв скобке должна соответствовать (быть в стеке) откр скобка:
+                if (stack.isEmpty() || stack.pop() != brackets.get(c)) {
+                    return false;
                 }
             }
-            return stack.isEmpty(); //или tru?
         }
+        return stack.isEmpty(); //или tru?
+    }
 
 
     /**
@@ -80,9 +81,17 @@ public class DateValidator {
      */
     private boolean isValidTokens() {
         for (String item : expression.split("")) {
-            if (!FIELDS.getToken().contains(item)) return false;
+            if (!tokens.contains(item)) return false;
         }
         return true;
+    }
+
+
+    /**
+     * Метод проверки выражения на пустоту.
+     */
+    private boolean isNotEmpty() {
+        return !expression.isEmpty();
     }
 
 }
