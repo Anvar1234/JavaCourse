@@ -1,6 +1,7 @@
 package OOP.solid;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static OOP.solid.Fields.*;
 
@@ -25,9 +26,6 @@ public class UnaryMinusPreparator {
         }
     }
 
-    public MathExpressionValidator getDateValidator() {
-        return mathExpressionValidator;
-    }
 
     /**
      * Результирующий метод для получения результирующей коллекции (массива),
@@ -82,6 +80,28 @@ public class UnaryMinusPreparator {
         }
         return arrayListTokens;
     }
+
+
+//    private ArrayList<String> unaryMinusSymbolNewChanger() {
+//
+//        ArrayList<String> arrayListTokens = this.validExpression;
+//        for (int i = 1; i < arrayListTokens.size(); i++) {
+//            if (i == 1 && arrayListTokens.get(0).equals("-")) {
+//                int minusIndex = 0; //arrayListTokens.indexOf("-");
+//                ArrayList<String> tempArrayListTokens = arrayListTokens; //new ArrayList<>(arrayListTokens.subList(minusIndex, arrayListTokens.size()-1));
+//                arrayListTokens.clear();
+//                arrayListTokens.add("0");
+//                arrayListTokens.addAll(tempArrayListTokens);
+//                //i++;
+//            } else if (arrayListTokens.get(i).equals("-") &&
+//                    brackets.containsValue(arrayListTokens.get(i - 1).charAt(0))) {
+//                arrayListTokens.set(i, "#");
+//                //i++;
+//            }
+//
+//        }
+//        return arrayListTokens;
+//    }
 
 
     /**

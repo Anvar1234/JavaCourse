@@ -4,6 +4,8 @@ import java.util.*;
 
 import static OOP.solid.Fields.brackets;
 import static OOP.solid.Fields.tokens;
+import static OOP.solid.Utils.addSpaces;
+
 
 /**
  * Класс для проверки пользовательского выражения (ввода).
@@ -13,11 +15,9 @@ import static OOP.solid.Fields.tokens;
 public class MathExpressionValidator {
 
     private final String expression;
-    private final Utils METHODS;
 
     public MathExpressionValidator(String expression) {
         this.expression = expression.replaceAll(" ", "").trim();
-        this.METHODS = new Utils();
     }
 
 
@@ -25,14 +25,14 @@ public class MathExpressionValidator {
      * Результирующий метод для получения результирующей коллекции (массива),
      * после необходимых проверок пользовательского выражения.
      */
-    public ArrayList<String> resultArrayAfterValidation() throws Exception {
+    public ArrayList<String> resultArrayAfterValidation() throws RuntimeException {
         if (isNotEmpty()) {
             if (isValidTokens()) {
                 if (isBracketsOrderCorrect()) {
                     return getArrayOfTokens();
-                } else throw new Exception("Некорректно расставлены скобки!");
-            } else throw new Exception("Использованы недопустимые символы!");
-        } else throw new Exception("Выражение пустое!");
+                } else throw new RuntimeException("Некорректно расставлены скобки!");
+            } else throw new RuntimeException("Использованы недопустимые символы!");
+        } else throw new RuntimeException("Выражение пустое!");
     }
 
 
@@ -46,7 +46,7 @@ public class MathExpressionValidator {
         //В строке ниже при сплитовании мы получаем массив строк. Методом asList мы преобразуем массив в список.
         //Ранее я делал переменную типа массива String[] и присваивал ей сплитованное выражение,
         //а затем форичом копировал в список.
-        return new ArrayList<>(Arrays.asList(METHODS.addSpaces(expression).split(" ")));
+        return new ArrayList<>(Arrays.asList(addSpaces(expression).split(" ")));
 //        }
 
     }

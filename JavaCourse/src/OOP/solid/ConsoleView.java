@@ -50,14 +50,8 @@ public class ConsoleView {
         String inputExpression = prompt();
 
 
-        //запускаем преобразование входящего выражения inputExpression.
-        UnaryMinusPreparator unaryMinusPreparator = new UnaryMinusPreparator(inputExpression);
-
-        //Получаем окончательное выражение для преобразования в ОПН.
-        ArrayList<String> resultArrayOfTransformation = unaryMinusPreparator.resultArrayAfterTransformation();
-
         //Загоняем выражение, прошедшее проверку и преобразование в ОПН-конвертер.
-        PolandNotationConverter polandNotationConverter = new PolandNotationConverter(resultArrayOfTransformation,inputExpression);
+        PolandNotationConverter polandNotationConverter = new PolandNotationConverter(inputExpression);
         ArrayList<String> resultArrayOfConvertation = polandNotationConverter.convertToPostfix();
         System.out.println(resultArrayOfConvertation);
 

@@ -10,14 +10,16 @@ import static OOP.solid.Utils.isNumber;
  */
 public class PolandNotationConverter {
 
-    private final ArrayList<String> expressionList;
-    private String expression;
+    private ArrayList<String> validExpressionAfterTransformation;
     private final UnaryMinusPreparator unaryMinusPreparator;
 
-    public PolandNotationConverter(ArrayList<String> expressionList, String expression) {
-        this.expression = expression;
-        this.expressionList = expressionList;
+    public PolandNotationConverter(String expression) {
         this.unaryMinusPreparator = new UnaryMinusPreparator(expression);
+        try {
+            this.validExpressionAfterTransformation = unaryMinusPreparator.resultArrayAfterTransformation();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
@@ -27,7 +29,7 @@ public class PolandNotationConverter {
         Deque<String> operators = new ArrayDeque<>(); //стек операторов
         ArrayList<String> resultPostfixArray = new ArrayList<>(); //коллекция вывода
 
-        for (String item : this.expressionList) {
+        for (String item : this.validExpressionAfterTransformation) {
             //Если элемент массива число, то в выводной список:
             if (isNumber(item)) {
                 resultPostfixArray.add(item);
