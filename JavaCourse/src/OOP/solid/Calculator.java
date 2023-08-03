@@ -3,23 +3,50 @@ package OOP.solid;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import static OOP.solid.Utils.isNumber;
 
 /**
  * Высчитывает ОПН.
  */
 public class Calculator {
 
+    private final PolandNotationConverter polandNotationConverter;
+    private ArrayList<String> validExpressionAfterConvertation;
+
     //todo ВОПРОС: можно ли использовать в разных методах одинаковые названия возвращаемых одним
     // и входящих в другой аргументов?
     // Кажется что так вроде понятнее читается. Как здесь resultPostfixArray.
-    public Deque<Double> calculatePostfixNotation(ArrayList<String> resultPostfixArray) { //Обработка постфиксного выражения
+
+    public Calculator(String expression){
+        this.polandNotationConverter = new PolandNotationConverter(expression);
+        try {
+            this.validExpressionAfterConvertation = polandNotationConverter.convertToPostfix();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+    }
+
+
+    /**
+     * Публичный результирующий метод для получения результата расчета пользовательского выражения.
+     */
+    public Deque<Double> resultDequeAfterCalculation() {
+        return calculatePostfixNotation();
+    }
+
+
+    /**
+     * Приватный метод для получения результата расчета пользовательского выражения.
+     */
+    private Deque<Double> calculatePostfixNotation() { //Обработка постфиксного выражения
+
         Deque<Double> resultStack = new ArrayDeque<>();
         double result;
 
-        for (String element : resultPostfixArray) {
+        for (String element : validExpressionAfterConvertation) {
             //Условие "Если элемент массива число, то перевод в дабл и пушим в стек"
-            Utils METHODS = new Utils();
-            if (METHODS.isNumber(element)) resultStack.push(Double.parseDouble(element));
+            if (isNumber(element)) resultStack.push(Double.parseDouble(element));
             else {
 
                 switch (element) {

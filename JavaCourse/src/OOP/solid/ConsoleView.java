@@ -11,25 +11,15 @@ import java.util.Scanner;
 
 /**
  * ВОПРОСЫ общие:
- * Нужно ли добавлять проверки методами из класса, методов этого же класса?
+
+ * Можно/нужно ли использовать одинаковые названия полей разных классов. А если смысл у них одинаковый?
  * <p>
- * Нужно/можно ли методы класса использовать внутри класса? А в других классах (вспомогательных)?
- * Можно/нужно ли использовать одинаковые названия полей разных классов. А если смыл у них одинаковый?
+ * Calculator Можно ли использовать в разных методах одинаковые названия возвращаемых одним и входящих
+ * в другой аргументов? Кажется что так вроде понятнее читается. Как здесь resultPostfixArray.
  * <p>
- * Calculator Можно ли использовать в разных методах одинаковые названия возвращаемых одним и входящих в другой аргументов?
- * кажется что так вроде понятнее читается. Как здесь resultPostfixArray.
- * <p>
- * Я правильно помню, что лучше использовать if-else вместо switch-case?
  * Как правильно понять regexы? И составлять.
  * <p>
- * Нужно ли оставлять такую проверку? Вопрос частично дублирует вопрос про использование методов внутри
- * других методов.
- * <p>
  * Что делать с этим методом?))
- * <p>
- * Transformator Вопрос к правильности создания и использования классов Фиелды и Методы.
- * может можно использовать поля ФИЕЛДЫ и МЕТОДС из Валидатора? Иначе получается дублирование
- * кода вроде как?
  */
 
 
@@ -50,22 +40,22 @@ public class ConsoleView {
 
         MathExpressionValidator mathExpressionValidator = new MathExpressionValidator(inputExpression);
         ArrayList<String> tempArray = mathExpressionValidator.resultArrayAfterValidation();
-        System.out.println(tempArray);
+        System.out.println("После валидатора:\n" + tempArray);
 
         UnaryMinusPreparator unaryMinusPreparator = new UnaryMinusPreparator(inputExpression);
-        ArrayList<String> temp2 = unaryMinusPreparator.resultArrayAfterTransformation(); // specialSymbolChanger();
-        System.out.println(temp2);
+        ArrayList<String> tempArray2 = unaryMinusPreparator.resultArrayAfterTransformation(); // specialSymbolChanger();
+        System.out.println("После трансформатора:\n" + tempArray2);
 
         //Загоняем выражение, прошедшее проверку и преобразование в ОПН-конвертер.
         PolandNotationConverter polandNotationConverter = new PolandNotationConverter(inputExpression);
         ArrayList<String> resultArrayOfConvertation = polandNotationConverter.convertToPostfix();
-        System.out.println(resultArrayOfConvertation);
+        System.out.println("ОПН:\n" + resultArrayOfConvertation);
 
         //Загоняем ОПН-выражение в калькулятор (котор высчитывает ОПН).
-        Calculator calculator = new Calculator();
-        Deque<Double> finalResultArray = calculator.calculatePostfixNotation(resultArrayOfConvertation);
+        Calculator calculator = new Calculator(inputExpression);
+        Deque<Double> finalResultArray = calculator.resultDequeAfterCalculation();
         //Выводим результат работы калькулятора.
-        System.out.println(finalResultArray);
+        System.out.println("Результат:\n" + finalResultArray);
 
 
     }

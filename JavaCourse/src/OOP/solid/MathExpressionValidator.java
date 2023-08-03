@@ -22,10 +22,10 @@ public class MathExpressionValidator {
 
 
     /**
-     * Результирующий метод для получения валидной результирующей коллекции (массива),
+     * Публичный результирующий метод для получения валидной результирующей коллекции (массива),
      * после необходимых проверок пользовательского выражения.
      */
-    public ArrayList<String> resultArrayAfterValidation() throws RuntimeException {
+    public ArrayList<String> resultArrayAfterValidation() {
         return getArrayOfTokens();
     }
 
@@ -34,7 +34,7 @@ public class MathExpressionValidator {
      * Метод для перевода массива строк (получаемого сплитованием по пробелам в исходном выражении
      * после работы метода addSpaces) в список ArrayList.
      */
-    private ArrayList<String> getArrayOfTokens() {
+    private ArrayList<String> getArrayOfTokens() throws RuntimeException {
         if (isBracketsOrderCorrect()) {
             return new ArrayList<>(Arrays.asList(addSpaces(expression).split(" ")));
         } else throw new RuntimeException("Некорректно расставлены скобки!");
@@ -45,7 +45,7 @@ public class MathExpressionValidator {
      * Метод проверки вложенности скобок в пользовательском выражении.
      * Должен идти после самого первого метода isValidToken.
      */
-    private boolean isBracketsOrderCorrect() {
+    private boolean isBracketsOrderCorrect() throws RuntimeException{
         if (isValidTokens()) {
             Deque<Character> stack = new LinkedList<>();
             for (char c : expression.toCharArray()) {
