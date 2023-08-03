@@ -15,7 +15,6 @@ public class UnaryMinusPreparator {
     private final MathExpressionValidator mathExpressionValidator;
 
 
-    //todo Может можно использовать поля ФИЕЛДЫ и МЕТОДС из Валидатора? Иначе получается дублирование кода вроде как?
     public UnaryMinusPreparator(String expression) {
         this.mathExpressionValidator = new MathExpressionValidator(expression);
         try {
@@ -27,64 +26,58 @@ public class UnaryMinusPreparator {
 
 
     /**
-     * Результирующий метод для получения результирующей коллекции (массива),
+     * Результирующий публичный метод для получения результирующей коллекции (массива),
      * после необходимых трансформаций пользовательского выражения.
      */
-    public ArrayList<String> resultArrayAfterTransformation() throws Exception {
-        if (validExpression.contains("#")) throw new Exception("Попытка повторного преобразования выражения!");
-        else if (isThereUnaryMinus()) {
-            return specialSymbolChanger();//метод unaryMinusSymbolChanger() вызывать не нужно, потому что он внутри метода specialSymbolChanger() вызывается.
-        } else {
-            System.out.println("Унарного минуса не обнаружено. Выражение готово к использованию.");
-        }
-        return validExpression;
+    public ArrayList<String> resultArrayAfterTransformation() {
+        return unaryMinusChanger();
     }
 
+
+//    /**
+//     * Метод для замены спецсимвола "#", которым ранее методом unaryMinusSymbolChanger
+//     * в пользовательском выражении заменили унарный минус, на коллекцию символов "(0-1)*".
+//     */
+//    public ArrayList<String> specialSymbolChanger() {
+//
+//        ArrayList<String> arrayListTokens = unaryMinusSymbolChanger();
+//        ArrayList<String> changedArrayListTokens = new ArrayList<>();
+//        for (String item : arrayListTokens) {
+//            if (!item.equals("#")) {
+//                changedArrayListTokens.add(item);
+//            } else {
+//                changedArrayListTokens.addAll(additionalCollectionOfTokens);
+//            }
+//        }
+//        return changedArrayListTokens;
+//    }
+//
+//
+//    /**
+//     * Метод для замены в пользовательском выражении унарного минуса на спецсимвол "#".
+//     */
+//    ArrayList<String> unaryMinusSymbolChanger() {
+//
+//        ArrayList<String> arrayListTokens = this.validExpression;
+//        for (int i = 1; i < arrayListTokens.size(); i++) {
+//            if (i == 1 && arrayListTokens.get(0).equals("-")) {
+//                arrayListTokens.set(0, "#");
+//                //i++;
+//            } else if (arrayListTokens.get(i).equals("-") &&
+//                    brackets.containsValue(arrayListTokens.get(i - 1).charAt(0))) {
+//                arrayListTokens.set(i, "#");
+//                //i++;
+//            }
+//
+//        }
+//        return arrayListTokens;
+//    }
 
     /**
-     * Метод для замены спецсимвола "#", которым ранее методом unaryMinusSymbolChanger
-     * в пользовательском выражении заменили унарный минус, на коллекцию символов "(0-1)*".
+     * Метод замены унарного минуса в выражении.
      */
-    public ArrayList<String> specialSymbolChanger() {
-
-        ArrayList<String> arrayListTokens = unaryMinusSymbolChanger();
-        ArrayList<String> changedArrayListTokens = new ArrayList<>();
-        for (String item : arrayListTokens) {
-            if (!item.equals("#")) {
-                changedArrayListTokens.add(item);
-            } else {
-                changedArrayListTokens.addAll(additionalCollectionOfTokens);
-            }
-        }
-        return changedArrayListTokens;
-    }
-
-
-    /**
-     * Метод для замены в пользовательском выражении унарного минуса на спецсимвол "#".
-     */
-    ArrayList<String> unaryMinusSymbolChanger() {
-
-        ArrayList<String> arrayListTokens = this.validExpression;
-        for (int i = 1; i < arrayListTokens.size(); i++) {
-            if (i == 1 && arrayListTokens.get(0).equals("-")) {
-                arrayListTokens.set(0, "#");
-                //i++;
-            } else if (arrayListTokens.get(i).equals("-") &&
-                    brackets.containsValue(arrayListTokens.get(i - 1).charAt(0))) {
-                arrayListTokens.set(i, "#");
-                //i++;
-            }
-
-        }
-        return arrayListTokens;
-    }
-
-
-    //todo Доделать метод. Сделать методы приватными.
-    public ArrayList<String> unaryMinusChanger() {
+    private ArrayList<String> unaryMinusChanger() {
         if (isThereUnaryMinus()) {
-
             ArrayList<String> arrayListTokens = this.validExpression;
             ArrayList<String> tempArray = new ArrayList<>();
             for (int i = 0; i < arrayListTokens.size(); i++) {
@@ -107,6 +100,7 @@ public class UnaryMinusPreparator {
             }
             return tempArray;
         }
+        return this.validExpression;
     }
 
 
@@ -126,9 +120,6 @@ public class UnaryMinusPreparator {
             if ((i == 1 && validExpression.get(0).equals("-")) ||
                     validExpression.get(i).equals("-") &&
                             brackets.containsValue(validExpression.get(i - 1).charAt(0))) {
-                //todo ВОПРОС: в brackets ошибка, не заходит в мапу походу. А птму что там у меня символы,
-                // а здесь я использую стринг. Возможно лучше переделать все методы,
-                // где используются char, либо здесь все правильно написал и делать лучше локально?
                 return true;
             }
         }

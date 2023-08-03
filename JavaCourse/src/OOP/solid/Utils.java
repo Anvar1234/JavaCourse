@@ -10,7 +10,7 @@ public class Utils {
      * хранятся строки). И нам не за чем проверять всю строку (а строка может состоять из символов типа 10.2), а
      * достаточно проверить лишь первый символ, то есть str.charAt(0), и тогда ясно, что перед нами - число.
      */
-    public final static boolean  isNumber(String exp) {
+    public final static boolean isNumber(String exp) {
         try {
             Integer.parseInt(String.valueOf(exp.charAt(0)));
             return true;

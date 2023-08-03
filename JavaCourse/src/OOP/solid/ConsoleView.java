@@ -1,6 +1,7 @@
 package OOP.solid;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Scanner;
 
 
@@ -52,19 +53,19 @@ public class ConsoleView {
         System.out.println(tempArray);
 
         UnaryMinusPreparator unaryMinusPreparator = new UnaryMinusPreparator(inputExpression);
-        ArrayList<String> temp2 = unaryMinusPreparator.unaryMinusChanger(); // specialSymbolChanger();
+        ArrayList<String> temp2 = unaryMinusPreparator.resultArrayAfterTransformation(); // specialSymbolChanger();
         System.out.println(temp2);
 
-//        //Загоняем выражение, прошедшее проверку и преобразование в ОПН-конвертер.
-//        PolandNotationConverter polandNotationConverter = new PolandNotationConverter(inputExpression);
-//        ArrayList<String> resultArrayOfConvertation = polandNotationConverter.convertToPostfix();
-//        System.out.println(resultArrayOfConvertation);
-//
-//        //Загоняем ОПН-выражение в калькулятор (котор высчитывает ОПН).
-//        Calculator calculator = new Calculator();
-//        Deque<Double> finalResultArray = calculator.calculatePostfixNotation(resultArrayOfConvertation);
-//        //Выводим результат работы калькулятора.
-//        System.out.println(finalResultArray);
+        //Загоняем выражение, прошедшее проверку и преобразование в ОПН-конвертер.
+        PolandNotationConverter polandNotationConverter = new PolandNotationConverter(inputExpression);
+        ArrayList<String> resultArrayOfConvertation = polandNotationConverter.convertToPostfix();
+        System.out.println(resultArrayOfConvertation);
+
+        //Загоняем ОПН-выражение в калькулятор (котор высчитывает ОПН).
+        Calculator calculator = new Calculator();
+        Deque<Double> finalResultArray = calculator.calculatePostfixNotation(resultArrayOfConvertation);
+        //Выводим результат работы калькулятора.
+        System.out.println(finalResultArray);
 
 
     }

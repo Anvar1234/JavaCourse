@@ -22,17 +22,11 @@ public class MathExpressionValidator {
 
 
     /**
-     * Результирующий метод для получения результирующей коллекции (массива),
+     * Результирующий метод для получения валидной результирующей коллекции (массива),
      * после необходимых проверок пользовательского выражения.
      */
     public ArrayList<String> resultArrayAfterValidation() throws RuntimeException {
-        if (isNotEmpty()) {
-            if (isValidTokens()) {
-                if (isBracketsOrderCorrect()) {
-                    return getArrayOfTokens();
-                } else throw new RuntimeException("Некорректно расставлены скобки!");
-            } else throw new RuntimeException("Использованы недопустимые символы!");
-        } else throw new RuntimeException("Выражение пустое!");
+        return getArrayOfTokens();
     }
 
 
@@ -41,14 +35,9 @@ public class MathExpressionValidator {
      * после работы метода addSpaces) в список ArrayList.
      */
     private ArrayList<String> getArrayOfTokens() {
-//        if (isBracketsOrderCorrect()) { //Нужно ли оставлять такую проверку? Вопрос частично дублирует
-        //вопрос про использование методов внутри других методов.
-        //В строке ниже при сплитовании мы получаем массив строк. Методом asList мы преобразуем массив в список.
-        //Ранее я делал переменную типа массива String[] и присваивал ей сплитованное выражение,
-        //а затем форичом копировал в список.
-        return new ArrayList<>(Arrays.asList(addSpaces(expression).split(" ")));
-//        }
-
+        if (isBracketsOrderCorrect()) {
+            return new ArrayList<>(Arrays.asList(addSpaces(expression).split(" ")));
+        } else throw new RuntimeException("Некорректно расставлены скобки!");
     }
 
 
@@ -57,21 +46,23 @@ public class MathExpressionValidator {
      * Должен идти после самого первого метода isValidToken.
      */
     private boolean isBracketsOrderCorrect() {
-        Deque<Character> stack = new LinkedList<>();
-        for (char c : expression.toCharArray()) {
-            //если мапа содержит значение "с" (откр скобка), то пушим ее в стек.
-            if (brackets.containsValue(c)) {
-                stack.push(c);
-                //иначе если перед нами закрыв скобка (ключ "с"), то:
-            } else if (brackets.containsKey(c)) {
-                //если стек пустой или последнее значение стека != значению по ключу (откр скобка),
-                // что означает что каждой закрыв скобке должна соответствовать (быть в стеке) откр скобка:
-                if (stack.isEmpty() || stack.pop() != brackets.get(c)) {
-                    return false;
+        if (isValidTokens()) {
+            Deque<Character> stack = new LinkedList<>();
+            for (char c : expression.toCharArray()) {
+                //если мапа содержит значение "с" (откр скобка), то пушим ее в стек.
+                if (brackets.containsValue(c)) {
+                    stack.push(c);
+                    //иначе если перед нами закрыв скобка (ключ "с"), то:
+                } else if (brackets.containsKey(c)) {
+                    //если стек пустой или последнее значение стека != значению по ключу (откр скобка),
+                    // что означает что каждой закрыв скобке должна соответствовать (быть в стеке) откр скобка:
+                    if (stack.isEmpty() || stack.pop() != brackets.get(c)) {
+                        return false;
+                    }
                 }
             }
-        }
-        return stack.isEmpty(); //или tru?
+            return stack.isEmpty(); //или tru?
+        } else throw new RuntimeException("Использованы недопустимые символы!");
     }
 
 
@@ -79,11 +70,13 @@ public class MathExpressionValidator {
      * Метод проверки наличия в пользовательском выражении только валидных токенов.
      * Самый первый метод.
      */
-    private boolean isValidTokens() {
-        for (String item : expression.split("")) {
-            if (!tokens.contains(item)) return false;
-        }
-        return true;
+    private boolean isValidTokens() throws RuntimeException {
+        if (isNotEmpty()) {
+            for (String item : expression.split("")) {
+                if (!tokens.contains(item)) return false;
+            }
+            return true;
+        } else throw new RuntimeException("Выражение пустое!");
     }
 
 
