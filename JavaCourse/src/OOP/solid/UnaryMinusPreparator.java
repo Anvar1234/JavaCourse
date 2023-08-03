@@ -1,7 +1,6 @@
 package OOP.solid;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static OOP.solid.Fields.*;
 
@@ -46,7 +45,7 @@ public class UnaryMinusPreparator {
      * Метод для замены спецсимвола "#", которым ранее методом unaryMinusSymbolChanger
      * в пользовательском выражении заменили унарный минус, на коллекцию символов "(0-1)*".
      */
-    private ArrayList<String> specialSymbolChanger() {
+    public ArrayList<String> specialSymbolChanger() {
 
         ArrayList<String> arrayListTokens = unaryMinusSymbolChanger();
         ArrayList<String> changedArrayListTokens = new ArrayList<>();
@@ -64,7 +63,7 @@ public class UnaryMinusPreparator {
     /**
      * Метод для замены в пользовательском выражении унарного минуса на спецсимвол "#".
      */
-    private ArrayList<String> unaryMinusSymbolChanger() {
+    ArrayList<String> unaryMinusSymbolChanger() {
 
         ArrayList<String> arrayListTokens = this.validExpression;
         for (int i = 1; i < arrayListTokens.size(); i++) {
@@ -82,26 +81,33 @@ public class UnaryMinusPreparator {
     }
 
 
-//    private ArrayList<String> unaryMinusSymbolNewChanger() {
-//
-//        ArrayList<String> arrayListTokens = this.validExpression;
-//        for (int i = 1; i < arrayListTokens.size(); i++) {
-//            if (i == 1 && arrayListTokens.get(0).equals("-")) {
-//                int minusIndex = 0; //arrayListTokens.indexOf("-");
-//                ArrayList<String> tempArrayListTokens = arrayListTokens; //new ArrayList<>(arrayListTokens.subList(minusIndex, arrayListTokens.size()-1));
-//                arrayListTokens.clear();
-//                arrayListTokens.add("0");
-//                arrayListTokens.addAll(tempArrayListTokens);
-//                //i++;
-//            } else if (arrayListTokens.get(i).equals("-") &&
-//                    brackets.containsValue(arrayListTokens.get(i - 1).charAt(0))) {
-//                arrayListTokens.set(i, "#");
-//                //i++;
-//            }
-//
-//        }
-//        return arrayListTokens;
-//    }
+    //todo Доделать метод. Сделать методы приватными.
+    public ArrayList<String> unaryMinusChanger() {
+        if (isThereUnaryMinus()) {
+
+            ArrayList<String> arrayListTokens = this.validExpression;
+            ArrayList<String> tempArray = new ArrayList<>();
+            for (int i = 0; i < arrayListTokens.size(); i++) {
+                //если элемент не минус, то добавляем его в вывод. коллекцию.
+                if (!arrayListTokens.get(i).equals("-")) {
+                    tempArray.add(arrayListTokens.get(i));
+                    //иначе если элемент является первым в коллекции (i==0),
+                    // то в вывод коллекцию добавляем строки 0 и -.
+                } else if (i == 0) {
+                    tempArray.add("0");
+                    tempArray.add("-");
+                    //иначе, если элемент "-" не первый, проверяем есть ли перед ним откр скобка, если
+                    // да, то в вывод коллекцию добавляем строки 0 и -.
+                } else if (brackets.containsValue(arrayListTokens.get(i - 1).charAt(0))) {
+                    tempArray.add("0");
+                    tempArray.add("-");
+                    //если минус - это не первый элемент и перед ним нет откр скобки,
+                    // то добавляем в выводную коллекцию.
+                } else tempArray.add("-");
+            }
+            return tempArray;
+        }
+    }
 
 
     /**
