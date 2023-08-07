@@ -3,8 +3,7 @@ package OOP.solid.tokens.impl;
 import OOP.solid.tokens.Tokens;
 import OOP.solid.tokens.MathOperations;
 
-public class ZeroToken implements Tokens, MathOperations {
-
+public class ZeroToken implements MathOperations, Tokens {
 
     @Override
     public double calculate(double[] args) {
@@ -13,7 +12,7 @@ public class ZeroToken implements Tokens, MathOperations {
 
     @Override
     public String getSymbol() {
-        return null;
+        return "0";
     }
 
     @Override

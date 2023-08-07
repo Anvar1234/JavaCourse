@@ -38,13 +38,10 @@ public class ConsoleView {
         //присваиваем пользовательский ввод переменной inputExpression.
         String inputExpression = prompt();
 
-        MathExpressionValidator mathExpressionValidator = new MathExpressionValidator(inputExpression);
-        ArrayList<String> tempArray = mathExpressionValidator.resultArrayAfterValidation();
-        System.out.println("После валидатора:\n" + tempArray);
-
+        //
         UnaryMinusPreparator unaryMinusPreparator = new UnaryMinusPreparator(inputExpression);
-        ArrayList<String> tempArray2 = unaryMinusPreparator.resultArrayAfterTransformation(); // specialSymbolChanger();
-        System.out.println("После трансформатора:\n" + tempArray2);
+        ArrayList<String> tempArray = unaryMinusPreparator.resultArrayAfterTransformation(); // specialSymbolChanger();
+        System.out.println("После трансформатора:\n" + tempArray);
 
         //Загоняем выражение, прошедшее проверку и преобразование в ОПН-конвертер.
         PolandNotationConverter polandNotationConverter = new PolandNotationConverter(inputExpression);

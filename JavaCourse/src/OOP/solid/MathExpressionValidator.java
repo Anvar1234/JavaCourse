@@ -4,7 +4,6 @@ import java.util.*;
 
 import static OOP.solid.Fields.brackets;
 import static OOP.solid.Fields.tokens;
-import static OOP.solid.Utils.addSpaces;
 
 
 /**
@@ -17,33 +16,24 @@ public class MathExpressionValidator {
     private final String expression;
 
     public MathExpressionValidator(String expression) {
-        this.expression = expression.replaceAll(" ", "").trim();
+        expression.replaceAll(" ", "").trim();
+        this.expression = expression;
     }
 
 
-    /**
-     * Публичный результирующий метод для получения валидной результирующей коллекции (массива),
-     * после необходимых проверок пользовательского выражения.
-     */
-    public ArrayList<String> resultArrayAfterValidation() {
-        return getArrayOfTokens();
-    }
-
 
     /**
-     * Метод для перевода массива строк (получаемого сплитованием по пробелам в исходном выражении
-     * после работы метода addSpaces) в список ArrayList.
+     * Публичный результирующий метод проверки валидности выражения.
      */
-    private ArrayList<String> getArrayOfTokens() throws RuntimeException {
+    public boolean isExpressionValid() throws RuntimeException {
         if (isBracketsOrderCorrect()) {
-            return new ArrayList<>(Arrays.asList(addSpaces(expression).split(" ")));
+            return true;
         } else throw new RuntimeException("Некорректно расставлены скобки!");
     }
 
 
     /**
      * Метод проверки вложенности скобок в пользовательском выражении.
-     * Должен идти после самого первого метода isValidToken.
      */
     private boolean isBracketsOrderCorrect() throws RuntimeException{
         if (isValidTokens()) {
@@ -68,7 +58,6 @@ public class MathExpressionValidator {
 
     /**
      * Метод проверки наличия в пользовательском выражении только валидных токенов.
-     * Самый первый метод.
      */
     private boolean isValidTokens() throws RuntimeException {
         if (isNotEmpty()) {

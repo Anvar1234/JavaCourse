@@ -1,8 +1,10 @@
 package OOP.solid;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static OOP.solid.Fields.*;
+import static OOP.solid.Utils.addSpaces;
 
 /**
  * Класс для преобразования пользовательского выражения, как то: проверка на унарный минус,
@@ -17,16 +19,16 @@ public class UnaryMinusPreparator {
 
     public UnaryMinusPreparator(String expression) {
         this.mathExpressionValidator = new MathExpressionValidator(expression);
-        try {
-            this.validExpression = mathExpressionValidator.resultArrayAfterValidation();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+        //todo Нужна ли эта строка? Без нее норм работает, даже если пробелы добавить.
+        expression.replaceAll(" ", "").trim();
+        if (mathExpressionValidator.isExpressionValid()) {
+            validExpression = new ArrayList<>(Arrays.asList(addSpaces(expression).split(" ")));
         }
     }
 
 
     /**
-     * Публичный результирующий метод для получения результирующей коллекции (массива),
+     * Публичный результирующий метод для получения коллекции (списка),
      * после необходимых трансформаций пользовательского выражения.
      */
     public ArrayList<String> resultArrayAfterTransformation() {
@@ -74,14 +76,14 @@ public class UnaryMinusPreparator {
 //    }
 
     /**
-     * Метод замены унарного минуса в выражении.
+     * Метод проверки в пользовательском выражении наличия унарного минуса и его замены.
      */
     private ArrayList<String> unaryMinusChanger() {
-        if (isThereUnaryMinus()) {
+        //if (isThereUnaryMinus()) {
             ArrayList<String> arrayListTokens = this.validExpression;
             ArrayList<String> tempArray = new ArrayList<>();
             for (int i = 0; i < arrayListTokens.size(); i++) {
-                //если элемент не минус, то добавляем его в вывод. коллекцию.
+                //если элемент не минус, то добавляем его в выводную коллекцию.
                 if (!arrayListTokens.get(i).equals("-")) {
                     tempArray.add(arrayListTokens.get(i));
                     //иначе если элемент является первым в коллекции (i==0),
@@ -99,32 +101,29 @@ public class UnaryMinusPreparator {
                 } else tempArray.add("-");
             }
             return tempArray;
-        }
-        return this.validExpression;
+//        }
+//        return this.validExpression;
     }
 
 
-    /**
-     * Метод для нахождения в пользовательском выражении унарного минуса.
-     * Данный метод должен следовать после проверки наличия только валидных токенов и
-     * правильной вложенности скобок, а также после перевода строки с пробелами в массив ArrayList.
-     * После этого метода мы уже можем переводить в постфиксную нотацию.
-     */
-    private boolean isThereUnaryMinus() {
-        for (int i = 1; i < validExpression.size(); i++) {
-            // Начинаю с i==1, птму что ниже в условии get(i - 1) может быть такое, что нулевой элемент это минус,
-            // и тогда метод get(i - 1) вызовет ошибку, так как
-            // в выражении нет предыдущих эементов.
-            // если нулевой элемент == минусу или если текущее значение (i>1) в выражении == минусу, но при этом
-            // предыдущий элемент == открывающей скобке, то:
-            if ((i == 1 && validExpression.get(0).equals("-")) ||
-                    validExpression.get(i).equals("-") &&
-                            brackets.containsValue(validExpression.get(i - 1).charAt(0))) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    /**
+//     * Метод для нахождения в пользовательском выражении унарного минуса.
+//     * Данный метод должен следовать после проверки наличия только валидных токенов и
+//     * правильной вложенности скобок, а также после перевода строки с пробелами в массив ArrayList.
+//     */
+//    private boolean isThereUnaryMinus() {
+//        for (int i = 1; i < validExpression.size(); i++) {
+//            // Начинаю с i==1, птму что ниже в условии get(i - 1) может быть такое, что нулевой элемент это минус,
+//            // и тогда метод get(i - 1) вызовет ошибку, так как
+//            // в выражении нет предыдущих эементов.
+//            // если нулевой элемент == минусу или если текущее значение (i>1) в выражении == минусу, но при этом
+//            // предыдущий элемент == открывающей скобке, то:
+//            if ((i == 1 && validExpression.get(0).equals("-")) ||
+//                    validExpression.get(i).equals("-") &&
+//                            brackets.containsValue(validExpression.get(i - 1).charAt(0))) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }
-
-
